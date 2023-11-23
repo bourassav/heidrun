@@ -1,1 +1,2 @@
 db_name = "warehouse.db"
+sql_folder = "sql"
