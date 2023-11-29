@@ -3,10 +3,13 @@ from config import settings
 
 def main():
     # Create db if not exists
-    sqlite3.connect(settings.db_name)
+    conn = sqlite3.connect(settings.db_name)
 
-    # Create tables if not exits
-    
+    # Get cursor
+    cur = conn.cursor()
+
+
+
 
 if __name__ == "__main__":
     main()
