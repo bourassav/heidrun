@@ -3,11 +3,13 @@ from sqlite3 import Error
 from config import settings
 import sys
 from pathlib import Path
+from rich import print
+from sys import exit
 
 
 def main(sql_file):
     # Get file path
-    file_path = Path.cwd().parent.joinpath(settings.sql_folder, sql_file)
+    file_path = Path.cwd().joinpath(settings.sql_folder, sql_file)
 
     # Connect to db
     conn = create_connection(settings.db_name)
@@ -15,14 +17,17 @@ def main(sql_file):
     # Execute the query
     execute_query(conn, file_path)
 
+    # Close the connection
+    conn.close()
+
 
 def create_connection(path):
     connection = None
     try:
         connection = sqlite3.connect(path)
-        print(f"Connection to {path} was successful")
     except Error as e:
-        print(f"The error {e} as occurred")
+        print(f"[bold red]Error![/bold red] The error {e} as occurred on the query {path}")
+        exit()
 
     return connection
 
@@ -34,9 +39,9 @@ def execute_query(connection, sql_file):
     try:
         cursor.execute(query)
         connection.commit()
-        print(f"{sql_file} executed successfully")
     except Error as e:
-        print(f"The error {e} as occurred")
+        print(f"[bold red]Error![/bold red] The error {e} as occurred with the {sql_file}")
+        exit()
 
 
 if __name__ == "__main__":
